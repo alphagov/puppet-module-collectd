@@ -1,20 +1,21 @@
+# https://collectd.org/wiki/index.php/Graphite
 class collectd::plugin::write_graphite (
-  $graphitehost = 'localhost',
-  $storerates   = false,
-  $graphiteport = '2003',
-  $ensure       = present
+  $ensure            = present,
+  $graphitehost      = 'localhost',
+  $graphiteport      = 2003,
+  $storerates        = true,
+  $graphiteprefix    = 'collectd.',
+  $graphitepostfix   = undef,
+  $escapecharacter   = '_',
+  $alwaysappendds    = false,
+  $protocol          = 'tcp',
+  $separateinstances = false,
 ) {
-  include collectd::params
+  validate_bool($storerates)
+  validate_bool($separateinstances)
 
-  $conf_dir = $collectd::params::plugin_conf_dir
-
-  file { 'write_graphite.conf':
-    ensure    => $collectd::plugin::write_graphite::ensure,
-    path      => "${conf_dir}/write_graphite.conf",
-    mode      => '0644',
-    owner     => 'root',
-    group     => 'root',
-    content   => template('collectd/write_graphite.conf.erb'),
-    notify    => Service['collectd'],
+  collectd::plugin {'write_graphite':
+    ensure  => $ensure,
+    content => template('collectd/plugin/write_graphite.conf.erb'),
   }
 }

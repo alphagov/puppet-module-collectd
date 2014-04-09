@@ -1,18 +1,12 @@
+# https://collectd.org/wiki/index.php/Plugin:IPTables
 class collectd::plugin::iptables (
-  $chains = 'UNSET',
-  $ensure = present
+  $ensure = present,
+  $chains = [],
 ) {
-  include collectd::params
+  validate_hash($chains)
 
-  $conf_dir = $collectd::params::plugin_conf_dir
-
-  file { 'iptables.conf':
-    ensure    => $collectd::plugin::iptables::ensure,
-    path      => "${conf_dir}/iptables.conf",
-    mode      => '0644',
-    owner     => 'root',
-    group     => 'root',
-    content   => template('collectd/iptables.conf.erb'),
-    notify    => Service['collectd']
+  collectd::plugin {'iptables':
+    ensure  => $ensure,
+    content => template('collectd/plugin/iptables.conf.erb'),
   }
 }
