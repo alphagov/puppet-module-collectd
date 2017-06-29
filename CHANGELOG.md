@@ -1,3 +1,7 @@
+## 2017-06.29 Release 5.2.1
+
+* Backport https://github.com/voxpupuli/puppet-collectd/pull/620
+
 ## 2016-12-05 Release 5.2.0
 
 * Modulesync with latest Vox Pupuli defaults
